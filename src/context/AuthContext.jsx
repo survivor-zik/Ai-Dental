@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../api/auth';
-
+import { Toaster, toast } from 'sonner';
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -19,6 +19,10 @@ export const AuthProvider = ({ children }) => {
     
     if (!token) {
       setIsAuthenticated(false);
+
+      setTimeout(() => {
+        toast.warn("Authentication required!")   
+      }, 3000);
       setIsLoading(false);
       return;
     }
@@ -38,8 +42,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const result = await authAPI.login(credentials);
       if (result.success) {
-        setIsAuthenticated(true);
-        navigate('/apikeys');
+        toast.success("Login successful!")     
+        setTimeout(() => {
+          setIsAuthenticated(true);
+          navigate('/apikeys');
+        }, 2000);
       }
       return result;
     } catch (error) {
@@ -65,6 +72,7 @@ export const AuthProvider = ({ children }) => {
       logout
     }}>
       {children}
+      <Toaster visibleToasts={1} richColors position='bottom-center'/>
     </AuthContext.Provider>
   );
 };

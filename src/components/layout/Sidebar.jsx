@@ -91,8 +91,8 @@ const Sidebar = () => {
 
   return (
     <div className="w-64 bg-[#1E1E1E] text-gray-300 flex flex-col h-screen">
-      <div className="p-4 border-b border-gray-800">
-        <h1 className="text-4xl font-bold mb-4">
+      <div className="p-4">
+        <h1 className="text-4xl font-bold">
           Dental<span className="text-[#FF4B55]">ai</span>
         </h1>
       </div>

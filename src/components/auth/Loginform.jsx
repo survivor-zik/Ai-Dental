@@ -1,7 +1,7 @@
-import React, { use } from 'react';
+import React, { use, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../context/AuthContext'; 
-
+import { Toaster, toast } from 'sonner';
 const LoginForm = () => {
  
   const { 
@@ -15,12 +15,22 @@ const LoginForm = () => {
     }
   });
 
+  const [isLoading , setIsLoading] = useState(false);
   const {login} = useAuth();
  
   const onSubmit = async (data) => {
-    const result = await login(data); 
-    if (!result.success) {
-      alert(result.error);
+    try {
+      setIsLoading(true);
+      const response = await login(data); 
+      if (!response.success) {
+        toast.error("Invalid email or password")
+        setTimeout(() => {
+          setIsLoading(false);    
+        }, 2000);
+      }
+    } catch(e) {
+      setIsLoading(false);
+      console.error(e);
     }
   };
 
@@ -102,9 +112,17 @@ const LoginForm = () => {
 
             <button 
               type="submit"
-              className="w-full bg-[#FF4B55] text-white rounded-lg py-2 hover:bg-[#E43E47] transition-colors"
+              disabled={isLoading}
+              className="w-full bg-[#FF4B55] text-white rounded-lg py-2 hover:bg-[#E43E47] transition-colors disabled:bg-[#E43E47] disabled:cursor-not-allowed"
             >
-              Login with Email
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                  Loading...
+                </div>
+              ) : (
+                'Login'
+              )}
             </button>
           </form>
 
@@ -148,6 +166,7 @@ const LoginForm = () => {
           </p>
         </div>
       </div>
+      <Toaster visibleToasts={1} richColors position='bottom-center'/>
     </div>
   );
 };
