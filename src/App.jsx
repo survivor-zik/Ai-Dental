@@ -4,6 +4,7 @@ import Sidebar from './components/layout/Sidebar';
 import LoginForm from './components/auth/LoginForm';
 import ApiKeysPage from './components/Modules/Apikey';
 import { useAuth } from './context/AuthContext';
+import RegisterForm from './components/auth/RegisterForm';
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
   
@@ -24,6 +25,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginForm />} />
+          <Route path='/register' element={<RegisterForm/>} /> 
           <Route 
             path="/*" 
             element={
@@ -31,6 +33,7 @@ function App() {
                 <div className="flex">
                   <Sidebar />
                   <Routes>
+                    
                     <Route path="/apikeys" element={<ApiKeysPage />} />
                     <Route path="/" element={<Navigate to="/apikeys" />} />
                   </Routes>
